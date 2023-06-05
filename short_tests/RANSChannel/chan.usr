@@ -210,7 +210,7 @@ c      m_id = 6 !non-regularized standard k-tau SST
 C     Wall distance function:
 c     use w_id = 2 for wallfunctions      
 c      w_id = 0                  ! user specified
-      w_id = 1 ! cheap_dist (path to wall, may work better for periodic boundaries)
+       w_id = 1 ! cheap_dist (path to wall, may work better for periodic boundaries)
 c      w_id = 2 ! distf (coordinate difference, provides smoother function)
 
       call rans_init(ifld_k,ifld_omega,ifcoeffs,coeffs,w_id,wd,m_id)

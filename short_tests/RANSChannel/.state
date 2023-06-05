@@ -1,5 +1,5 @@
-NEK_SOURCE_ROOT=/autofs/nccs-svm1_home1/sokyay/Nek5000
-FC=mpif77
+NEK_SOURCE_ROOT=/ibmstor/scratch/okyasina/projects/DillonNek/Nek5000
+FC=mpif90
 FFLAGS=
 FCPP=-cpp
 FR8=-fdefault-real-8 -fdefault-double-8
