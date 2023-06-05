@@ -1,0 +1,110 @@
+building genmap ... done
+using source path: /autofs/nccs-svm1_home1/sokyay/Nek5000
+using source path: /autofs/nccs-svm1_home1/sokyay/Nek5000
+generating makefile ... done
+building 3rd-party dependencies ... done
+
+mpif77 -c  -O2 -cpp -fdefault-real-8 -fdefault-double-8 -w -std=legacy  -DMPI -DUNDERSCORE -DGLOBAL_LONG_LONG -DTIMER -I/autofs/nccs-svm1_home1/sokyay/Nek5000/short_tests/RANSChannel -I/autofs/nccs-svm1_home1/sokyay/Nek5000/core -I./ -I/autofs/nccs-svm1_home1/sokyay/Nek5000/core/experimental -I/autofs/nccs-svm1_home1/sokyay/Nek5000/short_tests/RANSChannel/obj /autofs/nccs-svm1_home1/sokyay/Nek5000/core/drive1.f -o /autofs/nccs-svm1_home1/sokyay/Nek5000/short_tests/RANSChannel/obj/drive1.o
+mpif77 -c  -O2 -cpp -fdefault-real-8 -fdefault-double-8 -w -std=legacy  -DMPI -DUNDERSCORE -DGLOBAL_LONG_LONG -DTIMER -I/autofs/nccs-svm1_home1/sokyay/Nek5000/short_tests/RANSChannel -I/autofs/nccs-svm1_home1/sokyay/Nek5000/core -I./ -I/autofs/nccs-svm1_home1/sokyay/Nek5000/core/experimental -I/autofs/nccs-svm1_home1/sokyay/Nek5000/short_tests/RANSChannel/obj /autofs/nccs-svm1_home1/sokyay/Nek5000/core/drive2.f -o /autofs/nccs-svm1_home1/sokyay/Nek5000/short_tests/RANSChannel/obj/drive2.o
+mpif77 -c  -O2 -cpp -fdefault-real-8 -fdefault-double-8 -w -std=legacy  -DMPI -DUNDERSCORE -DGLOBAL_LONG_LONG -DTIMER -I/autofs/nccs-svm1_home1/sokyay/Nek5000/short_tests/RANSChannel -I/autofs/nccs-svm1_home1/sokyay/Nek5000/core -I./ -I/autofs/nccs-svm1_home1/sokyay/Nek5000/core/experimental -I/autofs/nccs-svm1_home1/sokyay/Nek5000/short_tests/RANSChannel/obj /autofs/nccs-svm1_home1/sokyay/Nek5000/core/plan5.f -o /autofs/nccs-svm1_home1/sokyay/Nek5000/short_tests/RANSChannel/obj/plan5.o
+mpicc -c  -O2  -DMPI -DUNDERSCORE -DGLOBAL_LONG_LONG -DTIMER -I/autofs/nccs-svm1_home1/sokyay/Nek5000/core -I./ -I/autofs/nccs-svm1_home1/sokyay/Nek5000/core/experimental -I/autofs/nccs-svm1_home1/sokyay/Nek5000/short_tests/RANSChannel/obj -I/autofs/nccs-svm1_home1/sokyay/Nek5000/3rd_party/gslib/include /autofs/nccs-svm1_home1/sokyay/Nek5000/core/nekio.c -o /autofs/nccs-svm1_home1/sokyay/Nek5000/short_tests/RANSChannel/obj/nekio.o
+mpif77 -c  -O2 -cpp -fdefault-real-8 -fdefault-double-8 -w -std=legacy  -DMPI -DUNDERSCORE -DGLOBAL_LONG_LONG -DTIMER -I/autofs/nccs-svm1_home1/sokyay/Nek5000/short_tests/RANSChannel -I/autofs/nccs-svm1_home1/sokyay/Nek5000/core -I./ -I/autofs/nccs-svm1_home1/sokyay/Nek5000/core/experimental -I/autofs/nccs-svm1_home1/sokyay/Nek5000/short_tests/RANSChannel/obj /autofs/nccs-svm1_home1/sokyay/Nek5000/core/plan4.f -o /autofs/nccs-svm1_home1/sokyay/Nek5000/short_tests/RANSChannel/obj/plan4.o
+mpif77 -c  -O2 -cpp -fdefault-real-8 -fdefault-double-8 -w -std=legacy  -DMPI -DUNDERSCORE -DGLOBAL_LONG_LONG -DTIMER -I/autofs/nccs-svm1_home1/sokyay/Nek5000/short_tests/RANSChannel -I/autofs/nccs-svm1_home1/sokyay/Nek5000/core -I./ -I/autofs/nccs-svm1_home1/sokyay/Nek5000/core/experimental -I/autofs/nccs-svm1_home1/sokyay/Nek5000/short_tests/RANSChannel/obj /autofs/nccs-svm1_home1/sokyay/Nek5000/core/bdry.f -o /autofs/nccs-svm1_home1/sokyay/Nek5000/short_tests/RANSChannel/obj/bdry.o
+mpif77 -c  -O2 -cpp -fdefault-real-8 -fdefault-double-8 -w -std=legacy  -DMPI -DUNDERSCORE -DGLOBAL_LONG_LONG -DTIMER -I/autofs/nccs-svm1_home1/sokyay/Nek5000/short_tests/RANSChannel -I/autofs/nccs-svm1_home1/sokyay/Nek5000/core -I./ -I/autofs/nccs-svm1_home1/sokyay/Nek5000/core/experimental -I/autofs/nccs-svm1_home1/sokyay/Nek5000/short_tests/RANSChannel/obj /autofs/nccs-svm1_home1/sokyay/Nek5000/core/coef.f -o /autofs/nccs-svm1_home1/sokyay/Nek5000/short_tests/RANSChannel/obj/coef.o
+Getting setup options...
+    Using IFMPI          = "True"
+    Using NEK_SOURCE_ROOT = "/autofs/nccs-svm1_home1/sokyay/Nek5000"
+    Using EXAMPLES_ROOT  = "/autofs/nccs-svm1_home1/sokyay/Nek5000/short_tests"
+    Using TOOLS_ROOT     = "/autofs/nccs-svm1_home1/sokyay/Nek5000/tools"
+    Using TOOLS_BIN      = "/autofs/nccs-svm1_home1/sokyay/Nek5000/bin"
+    Using VERBOSE_TESTS  = "True"
+    Using PARALLEL_PROCS = "2"
+Finished getting setup options!
+Getting setup options...
+    Using IFMPI          = "True"
+    Using NEK_SOURCE_ROOT = "/autofs/nccs-svm1_home1/sokyay/Nek5000"
+    Using EXAMPLES_ROOT  = "/autofs/nccs-svm1_home1/sokyay/Nek5000/short_tests"
+    Using TOOLS_ROOT     = "/autofs/nccs-svm1_home1/sokyay/Nek5000/tools"
+    Using TOOLS_BIN      = "/autofs/nccs-svm1_home1/sokyay/Nek5000/bin"
+    Using VERBOSE_TESTS  = "True"
+    Using PARALLEL_PROCS = "2"
+Finished getting setup options!
+Getting setup options...
+    Using IFMPI          = "True"
+    Using NEK_SOURCE_ROOT = "/autofs/nccs-svm1_home1/sokyay/Nek5000"
+    Using EXAMPLES_ROOT  = "/autofs/nccs-svm1_home1/sokyay/Nek5000/short_tests"
+    Using TOOLS_ROOT     = "/autofs/nccs-svm1_home1/sokyay/Nek5000/tools"
+    Using TOOLS_BIN      = "/autofs/nccs-svm1_home1/sokyay/Nek5000/bin"
+    Using VERBOSE_TESTS  = "True"
+    Using PARALLEL_PROCS = "2"
+Finished getting setup options!
+Compiling tools... 
+    Using output directory "/autofs/nccs-svm1_home1/sokyay/Nek5000/bin"
+    Using FC "None"
+    Using CC "None"
+Running "genmap"...
+    Using command "/autofs/nccs-svm1_home1/sokyay/Nek5000/bin/genmap"
+    Using stdin "['chan', '0.5']"
+    Using working directory "/autofs/nccs-svm1_home1/sokyay/Nek5000/short_tests/RANSChannel"
+Input .rea / .re2 name:
+ reading chan.re2                                                                        
+Input mesh tolerance (default 0.2):
+NOTE: smaller is better, but generous is more forgiving for bad meshes.
+ reading mesh data ...
+ start locglob_lexico:           4          21          84  0.50000000000000000     
+ locglob:           1           1          84
+ locglob:           2           4          84
+ locglob:           1          32          84
+ locglob:           2          32          84
+ done locglob_lexico:          32          32          84           4
+ start periodic vtx:          21          32
+           1 1  3  0  0.00000000E+00        1 shift
+           3 2  3  0  0.00000000E+00        2 shift
+           4 1  3  0  0.00000000E+00        3 shift
+           6 2  3  0  0.00000000E+00        4 shift
+           7 1  3  0  0.00000000E+00        5 shift
+           9 2  3  0  0.00000000E+00        6 shift
+          10 1  3  0  0.00000000E+00        7 shift
+          12 2  3  0  0.00000000E+00        8 shift
+          13 1  3  0  0.00000000E+00        9 shift
+          15 2  3  0  0.00000000E+00       10 shift
+          16 1  3  0  0.00000000E+00       11 shift
+          18 2  3  0  0.00000000E+00       12 shift
+          19 1  3  0  0.00000000E+00       13 shift
+          21 2  3  0  0.00000000E+00       14 shift
+ done periodic vtx
+ start rec_bisect:          21
+ done:    4.8% 
+ done:    9.5% 
+ done:   14.3% 
+ done:   19.0% 
+ done:   23.8% 
+ done:   28.6% 
+ done:   33.3% 
+ done:   38.1% 
+ done:   42.9% 
+ done:   47.6% 
+ done:   52.4% 
+ done:   57.1% 
+ done:   61.9% 
+ done:   66.7% 
+ done:   71.4% 
+ done:   76.2% 
+ done:   81.0% 
+ done:   85.7% 
+ done:   90.5% 
+ done:   95.2% 
+ done:  100.0% 
+  
+ done rec_bisect
+writing chan.ma2                                                                        
+Successfully finished genmap!
+Compiling nek5000...
+    Using working directory "/autofs/nccs-svm1_home1/sokyay/Nek5000/short_tests/RANSChannel"
+    Using .usr file "chan"
+    Using FC=""
+    Using CC=""
+    Using PPLIST=""
+    Using USR_LFLAGS=""
+    Using MPI="1"
+    Using NEK_SOURCE_ROOT="/autofs/nccs-svm1_home1/sokyay/Nek5000"

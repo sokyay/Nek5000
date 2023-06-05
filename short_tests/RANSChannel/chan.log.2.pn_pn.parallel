@@ -1,0 +1,21 @@
+ibv_open_device failed 0 4
+Number of active IB device ports not supported
+[login5:3013956] Error: common_pami.c:1094 - ompi_common_pami_init() 0: Unable to create 1 PAMI communication context(s) rc=1
+ibv_open_device failed 0 4
+Number of active IB device ports not supported
+[login5:3013957] Error: common_pami.c:1094 - ompi_common_pami_init() 1: Unable to create 1 PAMI communication context(s) rc=1
+--------------------------------------------------------------------------
+No components were able to be opened in the pml framework.
+
+This typically means that either no components of this type were
+installed, or none of the installed components can be loaded.
+Sometimes this means that shared libraries required by these
+components are unable to be found/loaded.
+
+  Host:      login5
+  Framework: pml
+--------------------------------------------------------------------------
+[login5:3013956] PML pami cannot be selected
+[login5:3013957] PML pami cannot be selected
+[login5:3013908] 1 more process has sent help message help-mca-base.txt / find-available:none found
+[login5:3013908] Set MCA parameter "orte_base_help_aggregate" to 0 to see all help / error messages
