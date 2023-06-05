@@ -1886,8 +1886,8 @@ class InclDef(NekTestCase):
         self.build_tools(["genmap"])
         self.run_genmap(tol="0.01")
 
-    @pn_pn_serial
-    def test_PnPn_Serial(self):
+    @pn_pn_parallel
+    def test_PnPn_Parallel(self):
         self.size_params["lx2"] = "lx1"
         self.config_size()
         self.build_nek()
@@ -2006,8 +2006,7 @@ class chan2d(NekTestCase):
 
         self.assertDelayedFailures()
 
-
-###############################################################
+#####################################################################
 
 class impsrc_scalar(NekTestCase):
     example_subdir  = 'impsrc_scalar'
@@ -2041,91 +2040,59 @@ class impsrc_scalar(NekTestCase):
 
         self.assertDelayedFailures()
 
-###############################################################
+#####################################################################
 
-class bcid_test_2D(NekTestCase):
-    example_subdir = 'bcid_test/2D'
-    case_name = 'bcid_test_2D'
+class RANSChannel(NekTestCase):
+    example_subdir = "RANSChannel"
+    case_name = "chan"
 
     def setUp(self):
-
+        # Default SIZE parameters. Can be overridden in test cases
         self.size_params = dict(
-            ldim      = '2',
-            lx1       = '8',
-            lxd       = '12',
-            lx2       = 'lx1-0',
-            lelg      = '18',
-            lx1m      = 'lx1',
-            ldimt     = '1'
+            ldim="2", lx1="8", lxd="12", lx2="lx1-0", lelg="96", lx1m="lx1", ldimt="3"
         )
 
-        self.build_tools(['gmsh2nek','genmap'])
-        self.run_gmsh2nek(dim='2',fmsh_file='fluid',smsh_file='solid',fP_list=['1 2'],sP_list=['10 20']),
+        self.build_tools(["genmap"])
         self.run_genmap()
-             
-    @pn_pn_serial
-    def test_PnPn_Serial(self):
+
+    @pn_pn_parallel
+    def test_Std_ktau(self):
         self.config_size()
         self.build_nek()
+        self.config_parfile({"GENERAL": {"userParam01": "4"}})
+        self.config_parfile({"GENERAL": {"startFrom": "ktau.fld + time=0"}})
         self.run_nek(step_limit=None)
 
-#test for 1D solution to velocity and temperature for CHT problem
-        vl1 = self.get_value_from_log('L1/L2 Error', column=-2, row=-2)
-        vl2 = self.get_value_from_log('L1/L2 Error', column=-1, row=-2)
-        tl1 = self.get_value_from_log('L1/L2 Error', column=-2, row=-1)
-        tl2 = self.get_value_from_log('L1/L2 Error', column=-1, row=-1)
-        self.assertAlmostEqualDelayed(vl1, target_val=0.0, delta=1E-10, label='VL1 err')
-        self.assertAlmostEqualDelayed(vl2, target_val=0.0, delta=1E-10, label='VL2 err')
-        self.assertAlmostEqualDelayed(tl1, target_val=0.0, delta=1E-7, label='TL1 err')
-        self.assertAlmostEqualDelayed(tl2, target_val=0.0, delta=1E-7, label='TL2 err')
+        xerr = self.get_value_from_log("u_tau", column=-1, row=-1)
+        dnsval = 4.1487e-2
+        relerr = abs(xerr-dnsval)/dnsval
 
-        self.assertDelayedFailures()
-
-
-###############################################################
-
-class bcid_test_3D(NekTestCase):
-    example_subdir = 'bcid_test/3D'
-    case_name = 'bcid_test_3D'
-
-    def setUp(self):
-
-        self.size_params = dict(
-            ldim      = '3',
-            lx1       = '4',
-            lxd       = '6',
-            lx2       = 'lx1-0',
-            lelg      = '960',
-            lx1m      = 'lx1',
-            ldimt     = '4'
+        self.assertAlmostEqualDelayed(
+            relerr, target_val=0.0, delta=6e-03, label="u_tau"
         )
 
-        self.build_tools(['gmsh2nek','genmap'])
-        self.run_gmsh2nek(fmsh_file='pipe')
-        self.run_genmap()
-             
+        self.assertDelayedFailures()
+
     @pn_pn_parallel
-    def test_PnPn_Parallel(self):
+    def test_Reg_komega(self):
         self.config_size()
         self.build_nek()
-        self.run_nek(step_limit=1)
+        self.config_parfile({"GENERAL": {"userParam01": "0"}})
+        self.config_parfile({"GENERAL": {"startFrom": "komega.fld + time=0"}})
+        self.run_nek(step_limit=None)
 
-#just count the boundaries for the 3D problem
-        nO = self.get_value_from_log('"O  "',column = 2)
-        nv = self.get_value_from_log('"v  "',column = 2)
-        nW = self.get_value_from_log('"W  "',column = 2)
-        nI = self.get_value_from_log('"I  "',column = 2)
-        nt = self.get_value_from_log('"t  "',column = 2)
+        xerr = self.get_value_from_log("u_tau", column=-1, row=-1)
+        dnsval = 4.1487e-2
+        relerr = abs(xerr-dnsval)/dnsval
 
-        self.assertEqual(nO,48)
-        self.assertEqual(nv,48)
-        self.assertEqual(nW,320)
-        self.assertEqual(nI,48)
-        self.assertEqual(nt,368)
+        self.assertAlmostEqualDelayed(
+            relerr, target_val=0.0, delta=6e-03, label="u_tau"
+        )
 
         self.assertDelayedFailures()
 
-###############################################################
+###############################################################        
+
 
 if __name__ == "__main__":
     import unittest
@@ -2193,6 +2160,7 @@ if __name__ == "__main__":
         lpm_one,
         lpm_two,
         chan2d,
+        RANSChannel,
     )
 
     suite = unittest.TestSuite(
