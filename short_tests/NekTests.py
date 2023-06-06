@@ -90,7 +90,7 @@ class wallfunc(NekTestCase):
     def setUp(self):
         # Default SIZE parameters. Can be overridden in test cases
         self.size_params = dict(
-            ldim="2", lx1="8", lxd="12", lx2="lx1-0", lelg="96", lx1m="lx1", ldimt="3"
+            ldim="2", lx1="6", lxd="12", lx2="lx1-0", lelg="60", lx1m="lx1", ldimt="4"
         )
 
         self.build_tools(["genmap"])
@@ -162,6 +162,7 @@ if __name__ == "__main__":
     testList = (
         Tools,
         RANSChannel,
+        wallfunc,
     )
 
     suite = unittest.TestSuite(

@@ -10,19 +10,19 @@ c
 
       ! BASIC
       parameter (ldim=2)               ! domain dimension (2 or 3)
-      parameter (lx1=8)                ! GLL points per element along each direction
+      parameter (lx1=6)                ! GLL points per element along each direction
       parameter (lxd=12)               ! GL  points for over-integration (dealiasing) 
       parameter (lx2=lx1-0)            ! GLL points for pressure (lx1 or lx1-2)
                                      
-      parameter (lelg=96)            ! max number of global elements
+      parameter (lelg=60)            ! max number of global elements
       parameter (lpmin=1)              ! min number of MPI ranks 
       parameter (lelt=lelg/lpmin + 3)  ! max number of local elements per MPI rank
-      parameter (ldimt=3)              ! max auxiliary fields (temperature + scalars)
+      parameter (ldimt=4)              ! max auxiliary fields (temperature + scalars)
 
       ! OPTIONAL
       parameter (ldimt_proj=1)         ! max auxiliary fields residual projection
       parameter (lelr=lelt)            ! max number of local elements per restart file
-      parameter (lhis=1)               ! max history/monitoring points
+      parameter (lhis=1001)               ! max history/monitoring points
       parameter (maxobj=1)             ! max number of objects
       parameter (lpert=1)              ! max number of perturbations
       parameter (nsessmax=1)           ! max sessions to NEKNEK

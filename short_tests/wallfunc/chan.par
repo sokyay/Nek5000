@@ -16,7 +16,7 @@ residualTol = 1.0e-5
 [VELOCITY]
 density = 1.0
 viscosity = -125000.0
-residualTol = 1.0e-6
+residualTol = 1.0e-8
 
 [TEMPERATURE]
 solver = none
@@ -27,9 +27,9 @@ residualTol = 1.0e-8
 [SCALAR01]
 density = 1.0
 diffusivity = -125000.0
-residualTol = 1.0e-6
+residualTol = 1.0e-8
 
 [SCALAR02]
 density = 1.0
 diffusivity = -125000.0
-residualTol = 1.0e-6
+residualTol = 1.0e-8
