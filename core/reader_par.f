@@ -10,7 +10,6 @@ C
       INCLUDE 'CTIMER'
 c
       logical ifbswap
-      integer np_io
 
       call setDefaultParam
 
@@ -20,7 +19,7 @@ c
       call bcastParam
 
       call usrdat0
-      
+
       call read_re2_hdr(ifbswap, .true.)
 
       call chkParam
@@ -76,13 +75,10 @@ C
       param(55) = 0    ! meanVelocity if param(55)<0 else meanVolumentricFlow
 
       param(59) = 1    ! No fast operator eval
- 
-      param(61) = 0    ! default number of aggregators
 
       param(65) = 1    ! just one i/o node
       param(66) = 6    ! write in binary
       param(67) = 6    ! read in binary
-      param(84) = 0.0  ! initial time step size
       param(93) = mxprev ! number of vectors for projection
 
       param(94) = 5    ! projection for helmholz solves (controled by ifprojfld) 
@@ -97,7 +93,7 @@ C
       param(161) = 2   ! cvode use stiff integration 
       param(162) = 0   ! cvode absolute tolerance
       param(163) = -1  ! cvode realtive tolerance
-      param(164) = 100 ! cvode don t limit internal dt
+      param(164) = 100 ! cvode don't limit internal dt
       param(165) = 1   ! cvode increment factor DQJ
       param(166) = 0   ! cvode use default ratio linear/non-linear tolerances
       param(167) = 0   ! cvode use no preconditioner
@@ -159,14 +155,6 @@ C
       ifprojfld(1) = .false. 
       do i=1,ldimt
          ifprojfld(1+i) = .false.
-      enddo
-
-      nbctype=0
-      do i=1,ldimt1
-        ifbmap(i)=.false.  !get cbc from par
-      enddo
-      do i=1,lbid
-        cbc_imap(i)=i !sequential IDs as default
       enddo
 
       ifflow    = .false.
@@ -235,9 +223,6 @@ c     - mhd support
       INCLUDE 'TSTEP'
 
       character*132 c_out,txt, txt2
-      character*3 cb3
-
-      logical isvalidcbc,isvalidcbct
 
       call finiparser_load(parfle,ierr)
       if(ierr .ne. 0) return
@@ -303,16 +288,6 @@ c set parameters
                write(6,*) 'is required for general:variableDt!'
                goto 999
             endif
-         endif
-      endif
-      call finiparser_getDbl(d_out,'general:initialDt',ifnd)
-      if (ifnd.eq.1) then
-         if(param(12).lt.0.0) then
-            write(6,*) 'general:variableDt'
-            write(6,*) 'is required for general:initialDt!'
-            goto 999
-         else 
-            param(84) = d_out
          endif
       endif
 
@@ -758,6 +733,7 @@ c set logical flags
         ifstrs = .false.
         if(i_out .eq. 1) ifstrs = .true.
       endif
+
       call finiparser_getBool(i_out,
      &                        'problemType:variableProperties',ifnd)
       if(ifnd .eq. 1) then
@@ -898,147 +874,6 @@ c set connectivity tolerance
       call finiparser_getDbl(d_out,'mesh:connectivityTol',ifnd)
       if(ifnd .eq. 1) connectivityTol = d_out
 
-c read BoundaryID map
-      call finiparser_findTokens('mesh:boundaryidmap', ',' ,ifnd)
-      if(ifnd.gt.lbid) then
-        write(6,'(a)')"Too many BC IDs specified in par"
-        write(6,'(a,i3)')"  Nek5000 only supports up to ",lbid
-        ierr = 1
-        ifnd = 0
-      else if(ifnd.ge.1) then
-        if(nint(param(32)).eq.0) param(32) = 1.0 ! stop the re2 reader from looking for other fields
-        nbctype=ifnd                             ! nelgt > nelgv forces the re2 reader to read field 2 BCs
-        do i = 1,ifnd                            ! not sure if we should rely on that...
-          call finiparser_getToken(c_out,i)
-          read(c_out,'(i132)') cbc_imap(i)
-        enddo
-      endif
-
-c read BC map for velocity
-      call finiparser_findTokens('velocity:boundarytypemap', ',' , ifnd)
-      if(ifnd.gt.lbid) then
-        write(6,'(a)')"Too many BCs specified for velocity in par"
-        write(6,'(a,i3)')"  Nek5000 only supports up to ",lbid
-        ierr = 1
-        ifnd = 0
-      elseif(ifnd.ge.1.and.nbctype.eq.0) then
-        nbctype=ifnd
-      elseif(ifnd.ne.nbctype) then
-        write(6,'(a,i3,a,i3,a)')
-     &              "Number of BCs specified for velocity in par (",ifnd
-     &                  ,") does not match boundaryIDMap (",nbctype,")!"
-        ierr = 1
-        ifnd = 0
-      endif
-
-      if(ifnd.ge.1)then
-        if(nint(param(32)).eq.0) param(32) = 1.0
-        ifbmap(1)=.true.
-        do i = 1,nbctype
-          call finiparser_getToken(c_out,i)
-          write(cb3,'(a3)')c_out
-          call capit(c_out,132)
-          if(isvalidcbc(cb3))then
-            cbc_bmap(i,1)=cb3
-          elseif(index(c_out,'AXIS').eq.1) then
-            cbc_bmap(i,1)='A  '
-          elseif(index(c_out,'DIRICHLET').eq.1) then
-            cbc_bmap(i,1)='v  '
-          elseif(index(c_out,'INLET').eq.1) then
-            cbc_bmap(i,1)='v  '
-          elseif(index(c_out,'INTERPOLATED').eq.1) then
-            cbc_bmap(i,1)='int'
-          elseif(index(c_out,'NONE').eq.1) then  !useful for conjugate ht
-            cbc_bmap(i,1)='   '
-          elseif(index(c_out,'OUTLET').eq.1) then
-            cbc_bmap(i,1)='O  '
-          elseif(index(c_out,'PERIODIC').eq.1) then
-            cbc_bmap(i,1)='P  '
-          elseif(index(c_out,'PRESSURE').eq.1) then
-            cbc_bmap(i,1)='o  '
-          elseif(index(c_out,'SYMMETRY').eq.1) then
-            cbc_bmap(i,1)='SYM'
-          elseif(index(c_out,'WALL').eq.1) then
-            cbc_bmap(i,1)='W  '
-          else
-            write(6,'(a,a)') "Invalid velocity boundary type in par: ",
-     &                                                       trim(c_out)
-            ierr=1
-          endif
-        enddo
-      endif
-
-c read BC map for temperature/scalars
-      do i = 1,ldimt
-        ifld = i+1
-        call blank(txt,132)
-        write(txt,"('scalar',i2.2)") i-1
-        if(i.eq.1) write(txt,"('temperature')")
-        write(txt2,"(a,a)")trim(txt),":boundarytypemap"
-        call finiparser_findTokens(txt2,',',ifnd)
-        if(ifnd.gt.lbid) then
-          write(6,'(3a)')
-     &                 "Too many BCs specified for ",trim(txt)," in par"
-          write(6,'(a,i3)')"  Nek5000 only supports up to ",lbid
-          ierr = 1
-          ifnd = 0
-        else if(ifnd.ge.1.and.nbctype.eq.0) then
-          nbctype=ifnd
-        else if(ifnd.ge.1.and.ifnd.ne.nbctype) then
-          write(6,'(3a,2i3)')
-     &                          "Number of BCs specified for ",trim(txt)
-     &              ," in par does not match other fields!",ifnd,nbctype
-          ierr=1
-          ifnd=0
-        endif
-
-        if(ifnd.ge.1) then
-          if(nint(param(32)).eq.0) param(32) = 1.0
-          ifbmap(ifld)=.true.
-          do j = 1,nbctype
-            call finiparser_getToken(c_out,j)
-            write(cb3,'(a3)') c_out
-            call capit(c_out,132)
-            if(isvalidcbct(cb3)) then
-              cbc_bmap(j,ifld)=cb3
-            elseif(index(c_out,'AXIS').eq.1) then
-              cbc_bmap(j,ifld)='A  '
-            elseif(index(c_out,'CONVECTION').eq.1) then
-              cbc_bmap(j,ifld)='c  '
-            elseif(index(c_out,'DIRICHLET').eq.1) then
-              cbc_bmap(j,ifld)='t  '
-            elseif(index(c_out,'FLUX').eq.1) then
-              cbc_bmap(j,ifld)='f  '
-            elseif(index(c_out,'INLET').eq.1) then
-              cbc_bmap(j,ifld)='t  '
-            elseif(index(c_out,'INSULATED').eq.1) then
-              cbc_bmap(j,ifld)='I  '
-            elseif(index(c_out,'INTERPOLATED').eq.1) then
-              cbc_bmap(j,ifld)='int'
-            elseif(index(c_out,'NEUMANN').eq.1) then
-              cbc_bmap(j,ifld)='f  '
-            elseif(index(c_out,'NONE').eq.1) then
-              cbc_bmap(j,ifld)='   '
-            elseif(index(c_out,'OUTLET').eq.1) then
-              cbc_bmap(j,ifld)='I  '
-            elseif(index(c_out,'PERIODIC').eq.1) then
-              cbc_bmap(j,ifld)='P  '
-            elseif(index(c_out,'RADIATION').eq.1) then
-              cbc_bmap(j,ifld)='r  '
-            elseif(index(c_out,'ROBIN').eq.1) then
-              cbc_bmap(j,ifld)='c  '
-            elseif(index(c_out,'SYMMETRY').eq.1) then
-              cbc_bmap(j,ifld)='I  '
-            else
-              write(6,'(a,a,a)')"Invalid ",txt,
-     &                             " boundary type in par: ",trim(c_out)
-              ierr=1
-            endif
-          enddo
-        endif
-      enddo
-
-c set properties
 100   if(ierr.eq.0) call finiparser_dump()
       return
 
@@ -1115,11 +950,6 @@ C
 
       call bcast(initc, 15*132*csize) 
 
-      call bcast(nbctype,               isize)
-      call bcast(ifbmap,         ldimt1*lsize)
-      call bcast(cbc_imap,  lbid*       isize)
-      call bcast(cbc_bmap,3*lbid*ldimt1*csize)
-
       call bcast(timeioe,sizeof(timeioe))
 
 c set some internals 
@@ -1185,13 +1015,11 @@ c-----------------------------------------------------------------------
       INCLUDE 'PARALLEL'
       INCLUDE 'CTIMER'
 c
-      integer*8 neltmx, nelvmx 
+      neltmx=np*lelt
+      nelvmx=np*lelv
 
-      neltmx=np*int(lelt,8)
-      nelvmx=np*int(lelv,8)
-
-      if(neltmx .gt. lelg) neltmx = lelg
-      if(nelvmx .gt. lelg) nelvmx = lelg
+      neltmx=min(neltmx,lelg)
+      nelvmx=min(nelvmx,lelg)
 
       nelgt = iglmax(nelgt,1)
       nelgv = iglmax(nelgv,1)
@@ -1422,39 +1250,3 @@ c-----------------------------------------------------------------------
 
       return
       end
-c-----------------------------------------------------------------------
-      logical function isvalidcbc(cbin)
-
-      include 'BCDICT'
-
-      character*3 cbin
-
-       isvalidcbc=.false.
-       do i=1,ncbcv
-         if(cbin.eq.cblistv(i)) then
-           isvalidcbc=.true.
-           goto 256
-         endif
-       enddo
- 256   continue
-
-       return
-       end
-c-----------------------------------------------------------------------
-      logical function isvalidcbct(cbin)
-
-      include 'BCDICT'
-
-      character*3 cbin
-
-       isvalidcbct=.false.
-       do i=1,ncbct
-         if(cbin.eq.cblistt(i)) then
-           isvalidcbct=.true.
-           goto 256
-         endif
-       enddo
- 256   continue
-
-       return
-       end

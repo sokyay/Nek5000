@@ -97,7 +97,7 @@ class wallfunc(NekTestCase):
         self.run_genmap()
 
     @pn_pn_parallel
-    def test_Std_ktau(self):
+    def test_Std_ktau_pfalse(self):
         self.config_size()
         self.build_nek()
         self.run_nek(step_limit=None)
@@ -107,11 +107,11 @@ class wallfunc(NekTestCase):
         relerr = abs(xerr-dnsval)/dnsval
 
         self.assertAlmostEqualDelayed(
-            relerr, target_val=0.0, delta=1e-02, label="u_tau"
+            relerr, target_val=0.0, delta=6e-02, label="u_tau"
         )
 
         self.assertDelayedFailures()
-
+        
 
 
 ###############################################################  

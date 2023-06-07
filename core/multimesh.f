@@ -229,7 +229,6 @@ c-----------------------------------------------------------------------
       end
 c-----------------------------------------------------------------------
       subroutine setup_int_neknek(dxf,dyf,dzf)
-
       include 'SIZE'
       include 'TOTAL'
       include 'NEKUSE'

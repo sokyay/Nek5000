@@ -215,11 +215,6 @@ fi
 case $FCcomp in
   *pgf*)       FCPP="-Mpreprocess"
                FR8="-r8"
-               FF77="-Mfixed"
-               ;;
-  *nvfortran*) FCPP="-Mpreprocess"
-               FR8="-r8"
-               FF77="-Mfixed"
                ;;
   *gfortran*)  FCPP="-cpp"
                FR8="-fdefault-real-8 -fdefault-double-8"
