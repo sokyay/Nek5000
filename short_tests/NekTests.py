@@ -90,7 +90,7 @@ class wallfunc(NekTestCase):
     def setUp(self):
         # Default SIZE parameters. Can be overridden in test cases
         self.size_params = dict(
-            ldim="2", lx1="6", lxd="12", lx2="lx1-0", lelg="60", lx1m="lx1", ldimt="4"
+            ldim="2", lx1="6", lxd="12", lx2="lx1-0", lelg="60", lx1m="lx1", ldimt="4", lhis="1001"
         )
 
         self.build_tools(["genmap"])
@@ -115,7 +115,93 @@ class wallfunc(NekTestCase):
 
 
 ###############################################################  
+# LES Periodic pipe
+# class turbPipe(NekTestCase):
+#     example_subdir = "turbPipe"
+#     case_name = "turbPipe"
 
+#     def setUp(self):
+#         # Default SIZE parameters. Can be overridden in test cases
+#         self.size_params = dict(
+#             ldim="3", lx1="8", lxd="12", lx2="lx1-0", lelg="1620", lx1m="lx1", ldimt="1"
+#         )
+
+#         self.build_tools(["genmap"])
+#         self.run_genmap()
+
+#     @pn_pn_parallel
+#     def test_Std_ktau(self):
+#         self.config_size()
+#         self.build_nek()
+#         self.run_nek(step_limit=None)
+
+#         xerr = self.get_value_from_log("u_tau", column=-1, row=-1)
+#         dnsval = 0.0579 # DNS by El Khoury et al.
+#         relerr = abs(xerr-dnsval)/dnsval
+
+#         self.assertAlmostEqualDelayed(
+#             relerr, target_val=0.0, delta=1e-02, label="u_tau"
+#         )
+
+#         self.assertDelayedFailures()
+
+
+###############################################################  
+
+class RANSPipe(NekTestCase):
+    example_subdir = "RANSPipe"
+    case_name = "chan"
+
+    def setUp(self):
+        # Default SIZE parameters. Can be overridden in test cases
+        self.size_params = dict(
+            ldim="2", lx1="8", lxd="12", lx2="lx1-0", lelg="99", lx1m="lx1", ldimt="3"
+        )
+
+        self.build_tools(["genmap"])
+        self.run_genmap()
+
+    @pn_pn_parallel
+    def test_Std_ktau(self):
+        self.config_size()
+        self.build_nek()
+        self.config_parfile({"GENERAL": {"userParam01": "4"}})
+        self.config_parfile({"GENERAL": {"startFrom": "ktau.fld + time=0"}})
+        self.run_nek(step_limit=None)
+
+        xerr = self.get_value_from_log("u_tau", column=-1, row=-1)
+        dnsval = 0.0579 # 19k Re (13.2% error)
+
+        relerr = abs(xerr-dnsval)/dnsval
+
+        self.assertAlmostEqualDelayed(
+            relerr, target_val=0.0, delta=1e-02, label="u_tau"
+        )
+
+        self.assertDelayedFailures()
+
+
+
+    @pn_pn_parallel
+    def test_Reg_komega(self):
+        self.config_size()
+        self.build_nek()
+        self.config_parfile({"GENERAL": {"userParam01": "0"}})
+        self.config_parfile({"GENERAL": {"startFrom": "komega.fld + time=0"}})
+        self.run_nek(step_limit=None)
+
+        xerr = self.get_value_from_log("u_tau", column=-1, row=-1)
+        dnsval = 0.0579 # 19k Re (13.2% error)
+        relerr = abs(xerr-dnsval)/dnsval
+
+        self.assertAlmostEqualDelayed(
+            relerr, target_val=0.0, delta=1e-02, label="u_tau"
+        )
+
+        self.assertDelayedFailures()
+
+
+###############################################################  
 if __name__ == "__main__":
     import unittest
     import argparse
@@ -163,6 +249,8 @@ if __name__ == "__main__":
         Tools,
         RANSChannel,
         wallfunc,
+        turbPipe,
+        RANSPipe,
     )
 
     suite = unittest.TestSuite(

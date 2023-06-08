@@ -102,7 +102,7 @@ c
       integer ix,iy,iz,iside,eg,e
       logical pcorrect
       e = gllel(eg)
-      pcorrect=.false.
+      pcorrect=.true.
       call ktau_wf(ix,iy,iz,iside,e,pcorrect)
 
       return
@@ -167,7 +167,7 @@ c-----------------------------------------------------------------------
         ptB(1) = ptA(1)
         ptB(2) = ymin
         ptB(3) = ptA(3)
-c        call RANSplot(ptA,ptB,1001)
+	call RANSplot(ptA,ptB,1001)
       endif
 
 c     Necessary for pressure-corrected wall functions
