@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+/usr/bin/env python3
 
 import sys
 from shutil import copyfile
@@ -30,7 +30,7 @@ class Tools(NekTestCase):
 
 ###############################################################################
 
-class 2DChannel(NekTestCase):
+class Channel(NekTestCase):
     example_subdir = "Channel"
     case_name = "chan"
 
@@ -83,7 +83,7 @@ class 2DChannel(NekTestCase):
 
 ###############################################################        
 
-class 3DPipe(NekTestCase):
+class Pipe(NekTestCase):
     example_subdir = "Pipe"
     case_name = "pipe"
 
