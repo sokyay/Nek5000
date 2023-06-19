@@ -112,6 +112,59 @@ class wallfunc(NekTestCase):
 
         self.assertDelayedFailures()
 
+###############################################################        
+
+class PipeRANS(NekTestCase):
+    example_subdir = "PipeRANS"
+    case_name = "pipe"
+
+    def setUp(self):
+        # Default SIZE parameters. Can be overridden in test cases
+        self.size_params = dict(
+            ldim="3", lx1="8", lxd="12", lx2="lx1-0", lelg="5000", lx1m="lx1", ldimt="6", lhis="1001"
+        )
+
+        self.build_tools(["genmap"])
+        self.run_genmap()
+
+    @pn_pn_parallel
+    def test_Std_ktau(self):
+        self.config_size()
+        self.build_nek()
+        self.config_parfile({"GENERAL": {"userParam01": "4"}})
+        self.config_parfile({"GENERAL": {"startFrom": "ktau.fld + time=0"}})
+        self.run_nek(step_limit=None)
+
+        xerr = self.get_value_from_log("u_tau", column=-1, row=-1)
+        dnsval = 0.0530 # 19k Re (5% error (goes down to 3% for 5k Re))
+
+        relerr = abs(xerr-dnsval)/dnsval
+
+        self.assertAlmostEqualDelayed(
+            relerr, target_val=0.0, delta=1e-02, label="u_tau"
+        )
+
+        self.assertDelayedFailures()
+
+
+
+    @pn_pn_parallel
+    def test_Reg_komega(self):
+        self.config_size()
+        self.build_nek()
+        self.config_parfile({"GENERAL": {"userParam01": "0"}})
+        self.config_parfile({"GENERAL": {"startFrom": "komega.fld + time=0"}})
+        self.run_nek(step_limit=None)
+
+        xerr = self.get_value_from_log("u_tau", column=-1, row=-1)
+        dnsval = 0.0530 # 19k Re (5% error)
+        relerr = abs(xerr-dnsval)/dnsval
+
+        self.assertAlmostEqualDelayed(
+            relerr, target_val=0.0, delta=1e-02, label="u_tau"
+        )
+
+        self.assertDelayedFailures()
 
     ###############################################################
 if __name__ == "__main__":

@@ -1,39 +1,39 @@
-#Nek5000 parameter file
 [GENERAL]
-startFrom = pipe.old
 dt = 10.0e-3
-numSteps = 2000
-writeInterval = 1000
+numsteps = 1000
+writeinterval = 1000
+userparam01 = 4
+startfrom = ktau.fld + time=0
 
 [PROBLEMTYPE]
-variableProperties = yes
-stressFormulation = yes
+variableproperties = yes
+stressformulation = yes
 
 [MESH]
-writeToFieldFile = no
+writetofieldfile = no
 
 [VELOCITY]
 viscosity = -37700.0
 density = 1.0
-residualTol = 1.0e-4
+residualtol = 1.0e-6
 
 [PRESSURE]
-residualProj = yes
-residualTol = 1.0e-3
+residualproj = yes
+residualtol = 1.0e-5
 
 [TEMPERATURE]
 solver = none
-rhoCp = 1.0
+rhocp = 1.0
 conductivity = -1.0
-residualTol = 1.0e-4
+residualtol = 1.0e-4
 
 [SCALAR01]
 density = 1.0
 diffusivity = -37700.0
-residualTol = 1.0e-4
+residualtol = 1.0e-6
 
 [SCALAR02]
 density = 1.0
 diffusivity = -37700.0
-residualTol = 1.0e-4
+residualtol = 1.0e-6
 
