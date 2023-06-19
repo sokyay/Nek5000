@@ -198,7 +198,7 @@ c-----------------------------------------------------------------------
       ifcoeffs=.false. !set to true to pass your own coeffs
 
 C     Supported models:
-      m_id = RANSMODELID
+       m_id = RANSMODELID
 c      m_id = 0 !regularized standard k-omega (no wall functions)
 c      m_id = 1 !regularized low-Re k-omega (no wall functions)
 c      m_id = 2 !regularized standard k-omega SST (no wall functions)

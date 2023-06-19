@@ -180,9 +180,7 @@
 
       call right_hand_check ! check non-right-hand element here
       call gather_bc_info
-
-      call set_periodicity(1)
-      if (eftot.ne.num_elem)  call set_periodicity(2)
+      call set_periodicity
 	  
       write(6,*) 'please give re2 file name:'
       call read_re2_name

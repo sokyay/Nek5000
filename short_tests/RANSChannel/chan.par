@@ -1,11 +1,11 @@
 [GENERAL]
-startfrom = ktau.fld + time=0
 stopat = endTime
 endtime = 50
 dt = 5.e-3
 writecontrol = runTime
 writeinterval = 50
 userparam01 = 4
+startfrom = ktau.fld + time=0
 
 [PROBLEMTYPE]
 variableproperties = yes

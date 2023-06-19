@@ -1,6 +1,6 @@
 [GENERAL]
-numsteps = 10000
-dt = 2.0e-2
+numsteps = 20000
+dt = 1e-2
 writeinterval = 5000
 
 [PROBLEMTYPE]
@@ -30,5 +30,4 @@ residualtol = 1.0e-6
 density = 1.0
 diffusivity = -125000.0
 residualtol = 1.0e-6
-
 

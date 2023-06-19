@@ -170,24 +170,11 @@ c---------------------------------------------------------------------
       real utau,utau1,utau2
 
       real ukstar,veddy,factro,u1plusc
-      
-      real utauwf
-      common /utau_wf/ utauwf(lx1,ly1,lz1,lelt)
-      
+            
       real yplusc, Econ, kappa, sCmu, Ccon, alp, bet
       common /wfparam/ yplusc, Econ, kappa, sCmu, Ccon, alp, bet
-     
+
       real velx,vely,velz
-      
-      integer icalld,ntot
-      save icalld
-      data icalld /0/
-      
-      if(icalld.eq.0)then
-       ntot = lx1*ly1*lz1*nelt
-       call rzero(utauwf,ntot)
-       icalld = 1
-      endif
       
       tol = 1.e-6
       tolmax = 1.e5
@@ -263,9 +250,7 @@ c         flux_tau = kappa*ukstar*tauw*factro
       else
          tau = 1./omega
       endif
-      
-       utauwf(ix,iy,iz,e) = utau
-       
+
       return
       end
 c---------------------------------------------------------------------
