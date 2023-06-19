@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 
 import sys
 from shutil import copyfile
@@ -31,7 +30,115 @@ class Tools(NekTestCase):
 ###############################################################################
 
 class Channel(NekTestCase):
-    example_subdir = "Channel"
+    example_subdir = "RANS_tests/Resolved/Channel"
+    case_name = "chan"
+
+    def setUp(self):
+        # Default SIZE parameters. Can be overridden in test cases
+        self.size_params = dict(
+            ldim="2", lx1="8", lxd="12", lx2="lx1-0", lelg="96", lx1m="lx1", ldimt="3"
+        )
+
+        self.build_tools(["genmap"])
+        self.run_genmap()
+
+    @pn_pn_parallel
+    def test_Std_ktau(self):
+        self.config_size()
+        self.build_nek()
+        self.config_parfile({"GENERAL": {"userParam01": "4"}})
+        self.config_parfile({"GENERAL": {"startFrom": "ktau.fld + time=0"}})
+        self.run_nek(step_limit=None)
+
+        xerr = self.get_value_from_log("u_tau", column=-1, row=-1)
+        dnsval = 4.1487e-2
+        relerr = abs(xerr-dnsval)/dnsval
+
+        self.assertAlmostEqualDelayed(
+            relerr, target_val=0.0, delta=1e-02, label="u_tau"
+        )
+
+        self.assertDelayedFailures()
+
+
+
+    @pn_pn_parallel
+    def test_Reg_komega(self):
+        self.config_size()
+        self.build_nek()
+        self.config_parfile({"GENERAL": {"userParam01": "0"}})
+        self.config_parfile({"GENERAL": {"startFrom": "komega.fld + time=0"}})
+        self.run_nek(step_limit=None)
+
+        xerr = self.get_value_from_log("u_tau", column=-1, row=-1)
+        dnsval = 4.1487e-2
+        relerr = abs(xerr-dnsval)/dnsval
+
+        self.assertAlmostEqualDelayed(
+            relerr, target_val=0.0, delta=1e-02, label="u_tau"
+        )
+
+        self.assertDelayedFailures()
+
+###############################################################        
+
+
+class Pipe(NekTestCase):
+    example_subdir = "RANS_tests/Resolved/Pipe"
+    case_name = "pipe"
+
+    def setUp(self):
+        # Default SIZE parameters. Can be overridden in test cases
+        self.size_params = dict(
+            ldim="3", lx1="8", lxd="12", lx2="lx1-0", lelg="5000", lx1m="lx1", ldimt="6", lhis="1001"
+        )
+
+        self.build_tools(["genmap"])
+        self.run_genmap()
+
+    @pn_pn_parallel
+    def test_Std_ktau(self):
+        self.config_size()
+        self.build_nek()
+        self.config_parfile({"GENERAL": {"userParam01": "4"}})
+        self.config_parfile({"GENERAL": {"startFrom": "ktau.fld + time=0"}})
+        self.run_nek(step_limit=None)
+
+        xerr = self.get_value_from_log("u_tau", column=-1, row=-1)
+        dnsval = 0.0530
+
+        relerr = abs(xerr-dnsval)/dnsval
+
+        self.assertAlmostEqualDelayed(
+            relerr, target_val=0.0, delta=1e-02, label="u_tau"
+        )
+
+        self.assertDelayedFailures()
+
+
+
+    @pn_pn_parallel
+    def test_Reg_komega(self):
+        self.config_size()
+        self.build_nek()
+        self.config_parfile({"GENERAL": {"userParam01": "0"}})
+        self.config_parfile({"GENERAL": {"startFrom": "komega.fld + time=0"}})
+        self.run_nek(step_limit=None)
+
+        xerr = self.get_value_from_log("u_tau", column=-1, row=-1)
+        dnsval = 0.0530
+        relerr = abs(xerr-dnsval)/dnsval
+
+        self.assertAlmostEqualDelayed(
+            relerr, target_val=0.0, delta=1e-02, label="u_tau"
+        )
+
+        self.assertDelayedFailures()
+        
+        ###############################################################################
+
+class WallChannel(NekTestCase):
+    example_subdir = "RANS_tests/Wall_Function/Channel"
     case_name = "chan"
 
     def setUp(self):
@@ -61,8 +168,8 @@ class Channel(NekTestCase):
         
 ###############################################################################
 
-class Pipe(NekTestCase):
-    example_subdir = "Pipe"
+class WallPipe(NekTestCase):
+    example_subdir = "RANS_tests/Wall_Function/Pipe"
     case_name = "chan"
 
     def setUp(self):
@@ -89,6 +196,7 @@ class Pipe(NekTestCase):
         )
 
         self.assertDelayedFailures()
+
     ###############################################################
 if __name__ == "__main__":
     import unittest
