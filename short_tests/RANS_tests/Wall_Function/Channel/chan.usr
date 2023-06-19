@@ -172,16 +172,16 @@ c-----------------------------------------------------------------------
      $        time,'u_tau:', u_tau
       endif
 
-      if(istep.eq.nsteps) then
-        call domain_size(xmin,xmax,ymin,ymax,zmin,zmax)
-        ptA(1) = 0.5*(xmin+xmax)
-        ptA(2) = ymax
-        ptA(3) = 0.5*(zmin+zmax)
-        ptB(1) = ptA(1)
-        ptB(2) = ymin
-        ptB(3) = ptA(3)
-	call RANSplot(ptA,ptB,1001)
-      endif
+c      if(istep.eq.nsteps) then
+c        call domain_size(xmin,xmax,ymin,ymax,zmin,zmax)
+c        ptA(1) = 0.5*(xmin+xmax)
+c        ptA(2) = ymax
+c        ptA(3) = 0.5*(zmin+zmax)
+c        ptB(1) = ptA(1)
+c        ptB(2) = ymin
+c        ptB(3) = ptA(3)
+c	call RANSplot(ptA,ptB,1001)
+c      endif
 
 c     Necessary for pressure-corrected wall functions
       call gradm1(dpdx,dpdy,dpdz,pr)

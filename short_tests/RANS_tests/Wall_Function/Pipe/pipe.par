@@ -1,0 +1,39 @@
+#Nek5000 parameter file
+[GENERAL]
+#startFrom = pipe.old
+dt = 10.0e-3
+numSteps = 20000
+writeInterval = 5000
+
+[PROBLEMTYPE]
+variableProperties = yes
+stressFormulation = yes
+
+[MESH]
+writeToFieldFile = no
+
+[VELOCITY]
+viscosity = -37700.0
+density = 1.0
+residualTol = 1.0e-4
+
+[PRESSURE]
+residualProj = yes
+residualTol = 1.0e-3
+
+[TEMPERATURE]
+solver = none
+rhoCp = 1.0
+conductivity = -1.0
+residualTol = 1.0e-4
+
+[SCALAR01]
+density = 1.0
+diffusivity = -37700.0
+residualTol = 1.0e-4
+
+[SCALAR02]
+density = 1.0
+diffusivity = -37700.0
+residualTol = 1.0e-4
+
