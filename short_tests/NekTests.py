@@ -170,7 +170,7 @@ class WallChannel(NekTestCase):
 
 class WallPipe(NekTestCase):
     example_subdir = "RANS_tests/Wall_Function/Pipe"
-    case_name = "chan"
+    case_name = "pipe"
 
     def setUp(self):
         # Default SIZE parameters. Can be overridden in test cases
