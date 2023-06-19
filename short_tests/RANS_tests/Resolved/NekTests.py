@@ -30,8 +30,8 @@ class Tools(NekTestCase):
 
 ###############################################################################
 
-class RANSChannel(NekTestCase):
-    example_subdir = "RANSChannel"
+class 2DChannel(NekTestCase):
+    example_subdir = "Channel"
     case_name = "chan"
 
     def setUp(self):
@@ -83,39 +83,8 @@ class RANSChannel(NekTestCase):
 
 ###############################################################        
 
-class wallfunc(NekTestCase):
-    example_subdir = "wallfunc"
-    case_name = "chan"
-
-    def setUp(self):
-        # Default SIZE parameters. Can be overridden in test cases
-        self.size_params = dict(
-            ldim="2", lx1="6", lxd="12", lx2="lx1-0", lelg="60", lx1m="lx1", ldimt="4", lhis="1001"
-        )
-
-        self.build_tools(["genmap"])
-        self.run_genmap()
-
-    @pn_pn_parallel
-    def test_Std_ktau_pfalse(self):
-        self.config_size()
-        self.build_nek()
-        self.run_nek(step_limit=None)
-
-        xerr = self.get_value_from_log("u_tau", column=-1, row=-1)
-        dnsval = 4.1487e-2
-        relerr = abs(xerr-dnsval)/dnsval
-
-        self.assertAlmostEqualDelayed(
-            relerr, target_val=0.0, delta=6e-02, label="u_tau"
-        )
-
-        self.assertDelayedFailures()
-
-###############################################################        
-
-class PipeRANS(NekTestCase):
-    example_subdir = "PipeRANS"
+class 3DPipe(NekTestCase):
+    example_subdir = "Pipe"
     case_name = "pipe"
 
     def setUp(self):
@@ -136,7 +105,7 @@ class PipeRANS(NekTestCase):
         self.run_nek(step_limit=None)
 
         xerr = self.get_value_from_log("u_tau", column=-1, row=-1)
-        dnsval = 0.0530 # 19k Re (5% error (goes down to 3% for 5k Re))
+        dnsval = 0.0530
 
         relerr = abs(xerr-dnsval)/dnsval
 
@@ -157,7 +126,7 @@ class PipeRANS(NekTestCase):
         self.run_nek(step_limit=None)
 
         xerr = self.get_value_from_log("u_tau", column=-1, row=-1)
-        dnsval = 0.0530 # 19k Re (5% error)
+        dnsval = 0.0530
         relerr = abs(xerr-dnsval)/dnsval
 
         self.assertAlmostEqualDelayed(
