@@ -144,7 +144,7 @@ class WallChannel(NekTestCase):
     def setUp(self):
         # Default SIZE parameters. Can be overridden in test cases
         self.size_params = dict(
-            ldim="2", lx1="6", lxd="12", lx2="lx1-0", lelg="60", lx1m="lx1", ldimt="4", lhis="1001"
+            ldim="2", lx1="7", lxd="12", lx2="lx1-0", lelg="60", lx1m="lx1", ldimt="4", lhis="1001"
         )
 
         self.build_tools(["genmap"])
@@ -175,7 +175,7 @@ class WallPipe(NekTestCase):
     def setUp(self):
         # Default SIZE parameters. Can be overridden in test cases
         self.size_params = dict(
-            ldim="3", lx1="6", lxd="12", lx2="lx1-0", lelg="5000", lx1m="lx1", ldimt="6", lhis="1001"
+            ldim="3", lx1="8", lxd="12", lx2="lx1-0", lelg="5000", lx1m="lx1", ldimt="6", lhis="1001"
         )
 
         self.build_tools(["genmap"])

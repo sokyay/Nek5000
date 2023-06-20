@@ -2,7 +2,7 @@
 [GENERAL]
 #startFrom = pipe.old
 dt = 10.0e-3
-numSteps = 20000
+numSteps = 10000
 writeInterval = 5000
 
 [PROBLEMTYPE]
