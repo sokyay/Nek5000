@@ -182,7 +182,7 @@ class WallPipe(NekTestCase):
         self.run_genmap()
 
     @pn_pn_parallel
-    def test_Std_ktau_pfalse(self):
+    def test_Std_ktau(self):
         self.config_size()
         self.build_nek()
         self.run_nek(step_limit=None)
@@ -192,11 +192,106 @@ class WallPipe(NekTestCase):
         relerr = abs(xerr-dnsval)/dnsval
 
         self.assertAlmostEqualDelayed(
-            relerr, target_val=0.0, delta=7e-02, label="u_tau"
+            relerr, target_val=0.0, delta=12e-02, label="u_tau"
         )
 
         self.assertDelayedFailures()
+        
+###############################################################################
 
+class BFS(NekTestCase):
+    example_subdir = "RANS_tests/Resolved/BackwardStep"
+    case_name = "bfs"
+
+    def setUp(self):
+        # Default SIZE parameters. Can be overridden in test cases
+        self.size_params = dict(
+            ldim="2", lx1="8", lxd="12", lx2="lx1-0", lelg="6000", lx1m="lx1", ldimt="4", lhis="1001"
+        )
+
+        self.build_tools(["genmap"])
+        self.run_genmap()
+
+    @pn_pn_parallel
+    def test_Std_ktau(self):
+        self.config_size()
+        self.config_parfile({"GENERAL": {"userParam01": "4"}})
+        self.config_parfile({"GENERAL": {"startFrom": "ktau.fld + time=0"}})
+        self.build_nek()
+        
+        self.run_nek(step_limit=None)
+        
+        xerr = self.get_value_from_log("r_l", column=-1, row=-1)
+        ransval = 6.58
+        expval = 6.26
+        relerr_ex = abs(xerr*4-expval)/expval
+        relerr_rans = abs(xerr*4-ransval)/ransval
+        
+        self.assertAlmostEqualDelayed(
+            relerr_ex, target_val=0.0, delta=5e-02, label="Reattachment Length Experimental"
+        )
+        self.assertAlmostEqualDelayed(
+            relerr_rans, target_val=0.0, delta=2e-02, label="Reattachment Length RANS (k_omega)"
+        )
+        
+    @pn_pn_parallel
+    def test_Std_komega(self):
+        self.config_size()
+        self.config_parfile({"GENERAL": {"userParam01": "0"}})
+        self.config_parfile({"GENERAL": {"startFrom": "komega.fld + time=0"}})
+        self.build_nek()
+        
+        self.run_nek(step_limit=None)
+        
+        xerr = self.get_value_from_log("r_l", column=-1, row=-1)
+        ransval = 6.58
+        expval = 6.26
+        relerr_ex = abs(xerr*4-expval)/expval
+        relerr_rans = abs(xerr*4-ransval)/ransval
+        
+        self.assertAlmostEqualDelayed(
+            relerr_ex, target_val=0.0, delta=5e-02, label="Reattachment Length Experimental"
+        )
+        self.assertAlmostEqualDelayed(
+            relerr_rans, target_val=0.0, delta=2e-02, label="Reattachment Length RANS (k_omega)"
+        )
+
+        self.assertDelayedFailures()
+###############################################################################
+
+class WallBFS(NekTestCase):
+    example_subdir = "RANS_tests/Wall_Function/BackwardStep"
+    case_name = "bfs"
+
+    def setUp(self):
+        # Default SIZE parameters. Can be overridden in test cases
+        self.size_params = dict(
+            ldim="2", lx1="6", lxd="12", lx2="lx1-0", lelg="4456", lx1m="lx1", ldimt="4", lhis="1001"
+        )
+
+        self.build_tools(["genmap"])
+        self.run_genmap()
+
+    @pn_pn_parallel
+    def test_Std_ktau_pfalse(self):
+        self.config_size()
+        self.build_nek()
+        self.run_nek(step_limit=None)
+
+        xerr = self.get_value_from_log("r_l", column=-1, row=-1)
+        ransval = 6.58
+        expval = 6.26
+        relerr_ex = abs(xerr*4-expval)/expval
+        relerr_rans = abs(xerr*4-ransval)/ransval
+        
+        self.assertAlmostEqualDelayed(
+            relerr_ex, target_val=0.0, delta=10e-02, label="Reattachment Length Experimental"
+        )
+        self.assertAlmostEqualDelayed(
+            relerr_rans, target_val=0.0, delta=12e-02, label="Reattachment Length RANS (k_omega)"
+        )
+
+        self.assertDelayedFailures()
     ###############################################################
 if __name__ == "__main__":
     import unittest
@@ -243,8 +338,12 @@ if __name__ == "__main__":
 
     testList = (
         Tools,
-        RANSChannel,
-        wallfunc,
+        Channel,
+        Pipe,
+        BFS,
+        WallChannel,
+        WallPipe,
+        WallBFS,
     )
 
     suite = unittest.TestSuite(

@@ -130,7 +130,7 @@ class NekTestCase(unittest.TestCase):
         self.log_root = ""
         self.verbose = True
         self.serial_procs = 1
-        self.parallel_procs = 48
+        self.parallel_procs = 192
         self.size_params = {}
 
         # These are overridden by method decorators (pn_pn_serial, pn_pn_parallel,
