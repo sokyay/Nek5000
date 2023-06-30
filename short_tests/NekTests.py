@@ -2,6 +2,7 @@
 import sys
 from shutil import copyfile
 import os
+import subprocess
 
 if sys.version_info < (3, 6):
     print("Sorry, requires Python > 3.6")
@@ -292,6 +293,42 @@ class WallBFS(NekTestCase):
         )
 
         self.assertDelayedFailures()
+
+###############################################################        
+
+class Dome(NekTestCase):
+    example_subdir = "RANS_tests/Resolved/Dome"
+    case_name = "dome"
+
+    def setUp(self):
+        # Default SIZE parameters. Can be overridden in test cases
+        self.size_params = dict(
+            ldim="2", lx1="9", lxd="12", lx2="lx1-0", lelg="3380", lx1m="lx1", ldimt="3", lhis="1001"
+        )
+
+        self.build_tools(["genmap"])
+        self.run_genmap()
+
+    @pn_pn_parallel
+    def test_Std_ktau(self):
+        self.config_size()
+        self.build_nek()
+        self.run_nek(step_limit=None)
+        
+        os.chdir("RANS_tests/Resolved/Dome/")
+
+        subprocess.run(["python", "diff.py"])
+
+
+        xerr = self.get_value_from_log("Max of L2 Norm of RANS to EXP : ", column=-1, row=-1) / 100
+        
+        self.assertAlmostEqualDelayed(
+            xerr, target_val=0.0, delta=16e-02, label="Max L2 Norm"
+        )
+
+        self.assertDelayedFailures()
+        
+        
     ###############################################################
 if __name__ == "__main__":
     import unittest
@@ -344,6 +381,7 @@ if __name__ == "__main__":
         WallChannel,
         WallPipe,
         WallBFS,
+        TAMUDome,
     )
 
     suite = unittest.TestSuite(
