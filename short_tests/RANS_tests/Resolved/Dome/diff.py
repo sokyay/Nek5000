@@ -27,7 +27,8 @@ for i in range(1,9):
     simulation_x = simulation_data[:, 0]  # Assuming x values are in the first column
     simulation_v = simulation_data[:, 2]  # Assuming velocity values are in the second column
     simulation_v_n= simulation_data[:, 2] /np.max(simulation_v)
-    
+    #TKE
+    simulation_tke_n = simulation_data[:,3] / np.max(simulation_data[:,3])
     # Linear Interpolation
     interp_func = interp1d(simulation_x, simulation_v_n)
     interpolated_v = interp_func(experimental_x)
@@ -46,7 +47,11 @@ for i in range(1,9):
     simulation_x_r = rans_data[:, 1]  # Assuming x values are in the first column
     simulation_v_r = -rans_data[:, 2]  # Assuming velocity values are in the second column
     simulation_v_n_r= simulation_v_r /np.max(np.abs(simulation_v_r))
-    
+    #TKE
+    simulation_tke_r_n = rans_data[:,6] / np.max(rans_data[:,6])
+    interp_func = interp1d(simulation_x_r, simulation_tke_r_n)
+    interpolated_tke_r = interp_func(simulation_x)
+   
     #Linear Interpolation
     interp_func = interp1d(simulation_x_r, simulation_v_n_r)
     interpolated_v_r = interp_func(experimental_x)
@@ -62,14 +67,28 @@ for i in range(1,9):
     absolute_difference_bet = np.abs(interpolated_v_r - interpolated_v)
     l2_norm_bet =  np.linalg.norm(absolute_difference_bet)/np.linalg.norm(experimental_v) *100
     l1_norm_bet =  np.linalg.norm(absolute_difference_bet,ord=1)/np.linalg.norm(experimental_v,ord=1) *100
-    
+    #TKE
+    simulation_tke_r_n = rans_data[:,6] / np.max(rans_data[:,6])
+    interp_func = interp1d(simulation_x_r, simulation_tke_r_n)
+    interpolated_tke_r = interp_func(simulation_x)
+
+
 #    Comparison of velocities as graph on each axial location    
-#    plt.clf()
-#    plt.plot(experimental_x, interpolated_v,'b' ,label='LES')
-#    plt.plot(experimental_x, interpolated_v_r, 'r', label='RANS')
-#    plt.plot(experimental_x, experimental_v, 'g*', label='Exp')
-#    plt.legend()
-#    plt.savefig('loc'+str(i)+'.png')
+    plt.clf()
+    plt.plot(simulation_x, interpolated_tke_r,'b' ,label='RANS-TKE')
+    plt.plot(simulation_x, simulation_tke_n, 'r', label='LES-TKE')
+    plt.legend()
+    plt.title('Axial Location =' +str(i))
+
+    plt.savefig('TKE_loc'+str(i)+'.png')
+#    Comparison of velocities as graph on each axial location    
+    plt.clf()
+    plt.plot(experimental_x, interpolated_v,'b' ,label='LES-Vel_z')
+    plt.plot(experimental_x, interpolated_v_r, 'r', label='RANS-Vel_z')
+    plt.plot(experimental_x, experimental_v, 'g*', label='Exp-Vel_z')
+    plt.legend()
+    plt.title('Axial Location =' +str(i))
+    plt.savefig('Vel_loc'+str(i)+'.png')
 
     l2_norm_rans[i-1]=l2_norm_r
     print("Location => ",i,"Relative difference (%):")

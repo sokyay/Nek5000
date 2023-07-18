@@ -1,6 +1,6 @@
 [GENERAL]
 dt = 10.0e-3
-numsteps = 1000
+numsteps = 10000
 writeinterval = 1000
 userparam01 = 0
 startfrom = komega.fld + time=0
