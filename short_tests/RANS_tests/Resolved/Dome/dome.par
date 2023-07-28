@@ -2,12 +2,12 @@
 [GENERAL]
 startFrom = dome.fld
 stopAt = numSteps
-numSteps = 10000
+numSteps = 1
 dt = 1.0e-3
-writeInterval = 5000
+writeInterval = 1
 
 [MESH]
-writeToFieldFile = no
+writeToFieldFile = yes
 
 [PROBLEMTYPE]
 equation = incompNS

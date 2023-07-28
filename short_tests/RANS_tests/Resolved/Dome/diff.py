@@ -78,6 +78,9 @@ for i in range(1,9):
     plt.plot(simulation_x, interpolated_tke_r,'b' ,label='RANS-TKE')
     plt.plot(simulation_x, simulation_tke_n, 'r', label='LES-TKE')
     plt.legend()
+    plt.xlabel('Radial Location')
+    plt.grid(True,linestyle='--')
+    plt.ylabel('Normalized TKE')
     plt.title('Axial Location =' +str(i))
 
     plt.savefig('TKE_loc'+str(i)+'.png')
@@ -87,6 +90,9 @@ for i in range(1,9):
     plt.plot(experimental_x, interpolated_v_r, 'r', label='RANS-Vel_z')
     plt.plot(experimental_x, experimental_v, 'g*', label='Exp-Vel_z')
     plt.legend()
+    plt.xlabel('Radial Location')
+    plt.ylabel('Normalized Velocity')
+    plt.grid(True,linestyle='--')
     plt.title('Axial Location =' +str(i))
     plt.savefig('Vel_loc'+str(i)+'.png')
 
