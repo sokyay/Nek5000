@@ -2,9 +2,9 @@
 [GENERAL]
 startFrom = dome.fld
 stopAt = numSteps
-numSteps = 1
+numSteps = 100000
 dt = 1.0e-3
-writeInterval = 1
+writeInterval = 10000
 
 [MESH]
 writeToFieldFile = yes
