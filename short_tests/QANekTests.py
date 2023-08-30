@@ -51,12 +51,10 @@ class Channel(NekTestCase):
         self.config_parfile({"GENERAL": {"startFrom": "ktau.fld + time=0"}})
         self.run_nek(step_limit=None)
 
-        xerr = self.get_value_from_log("u_tau", column=-1, row=-1)
-        dnsval = 4.1487e-2
-        relerr = abs(xerr-dnsval)/dnsval
+        utau = self.get_value_from_log("u_tau", column=-1, row=-1)
 
         self.assertAlmostEqualDelayed(
-            relerr, target_val=0.0, delta=1e-02, label="u_tau"
+            utau, target_val=4.126E-002, delta=1.0e-5, label="u_tau"
         )
 
         self.assertDelayedFailures()
@@ -71,12 +69,10 @@ class Channel(NekTestCase):
         self.config_parfile({"GENERAL": {"startFrom": "komega.fld + time=0"}})
         self.run_nek(step_limit=None)
 
-        xerr = self.get_value_from_log("u_tau", column=-1, row=-1)
-        dnsval = 4.1487e-2
-        relerr = abs(xerr-dnsval)/dnsval
+        utau = self.get_value_from_log("u_tau", column=-1, row=-1)
 
         self.assertAlmostEqualDelayed(
-            relerr, target_val=0.0, delta=1e-02, label="u_tau"
+            utau, target_val=4.131E-002, delta=1e-05, label="u_tau"
         )
 
         self.assertDelayedFailures()
@@ -91,16 +87,14 @@ class Pipe(NekTestCase):
     def setUp(self):
         # Default SIZE parameters. Can be overridden in test cases
         self.size_params = dict(
-            ldim="3", lx1="5", lxd="12", lx2="lx1-0", lelg="5000", lx1m="lx1", ldimt="6", lhis="1001"
+            ldim="3", lx1="8", lxd="12", lx2="lx1-0", lelg="5000", lx1m="lx1", ldimt="6", lhis="1001"
         )
 
         self.build_tools(["genmap"])
         self.run_genmap()
-        self.parallel_procs = 48
-
+	self.parallel_procs = 48
     @pn_pn_parallel
     def test_Std_ktau(self):
-        
         self.config_size()
         self.build_nek()
         self.config_parfile({"GENERAL": {"userParam01": "4"}})
@@ -108,12 +102,10 @@ class Pipe(NekTestCase):
         self.run_nek(step_limit=None)
 
         xerr = self.get_value_from_log("u_tau", column=-1, row=-1)
-        dnsval = 0.0530
 
-        relerr = abs(xerr-dnsval)/dnsval
 
         self.assertAlmostEqualDelayed(
-            relerr, target_val=0.0, delta=1e-02, label="u_tau"
+            xerr, target_val=5.306E-002, delta=1e-05, label="u_tau"
         )
 
         self.assertDelayedFailures()
@@ -129,11 +121,9 @@ class Pipe(NekTestCase):
         self.run_nek(step_limit=None)
 
         xerr = self.get_value_from_log("u_tau", column=-1, row=-1)
-        dnsval = 0.0530
-        relerr = abs(xerr-dnsval)/dnsval
 
         self.assertAlmostEqualDelayed(
-            relerr, target_val=0.0, delta=1e-02, label="u_tau"
+            xerr, target_val=5.323E-002, delta=1e-05, label="u_tau"
         )
 
         self.assertDelayedFailures()
@@ -159,12 +149,10 @@ class WallChannel(NekTestCase):
         self.build_nek()
         self.run_nek(step_limit=None)
 
-        xerr = self.get_value_from_log("u_tau", column=-1, row=-1)
-        dnsval = 4.1487e-2
-        relerr = abs(xerr-dnsval)/dnsval
+        utau = self.get_value_from_log("u_tau", column=-1, row=-1)
 
         self.assertAlmostEqualDelayed(
-            relerr, target_val=0.0, delta=7e-02, label="u_tau"
+            utau, target_val=3.882E-002, delta=1e-5, label="u_tau"
         )
 
         self.assertDelayedFailures()
@@ -178,13 +166,12 @@ class WallPipe(NekTestCase):
     def setUp(self):
         # Default SIZE parameters. Can be overridden in test cases
         self.size_params = dict(
-            ldim="3", lx1="5", lxd="12", lx2="lx1-0", lelg="5000", lx1m="lx1", ldimt="6", lhis="1001"
+            ldim="3", lx1="8", lxd="12", lx2="lx1-0", lelg="5000", lx1m="lx1", ldimt="6", lhis="1001"
         )
 
         self.build_tools(["genmap"])
         self.run_genmap()
-        self.parallel_procs = 48
-
+	self.parallel_procs = 48
     @pn_pn_parallel
     def test_Std_ktau(self):
         self.config_size()
@@ -192,11 +179,9 @@ class WallPipe(NekTestCase):
         self.run_nek(step_limit=None)
 
         xerr = self.get_value_from_log("u_tau", column=-1, row=-1)
-        dnsval = 0.0530
-        relerr = abs(xerr-dnsval)/dnsval
 
         self.assertAlmostEqualDelayed(
-            relerr, target_val=0.0, delta=12e-02, label="u_tau"
+            relerr, target_val=4.703E-002, delta=1e-5, label="u_tau"
         )
 
         self.assertDelayedFailures()
@@ -215,7 +200,7 @@ class BFS(NekTestCase):
 
         self.build_tools(["genmap"])
         self.run_genmap()
-        self.parallel_procs = 96
+	self.parallel_procs = 96
     @pn_pn_parallel
     def test_Std_ktau(self):
         self.config_size()
@@ -226,16 +211,10 @@ class BFS(NekTestCase):
         self.run_nek(step_limit=None)
         
         xerr = self.get_value_from_log("r_l", column=-1, row=-1)
-        ransval = 6.58
-        expval = 6.26
-        relerr_ex = abs(xerr*4-expval)/expval
-        relerr_rans = abs(xerr*4-ransval)/ransval
+        r_l = xerr*4
         
         self.assertAlmostEqualDelayed(
-            relerr_ex, target_val=0.0, delta=5e-02, label="Reattachment Length Experimental"
-        )
-        self.assertAlmostEqualDelayed(
-            relerr_rans, target_val=0.0, delta=2e-02, label="Reattachment Length RANS (k_omega)"
+            r_l, target_val=6.480, delta=1e-7, label="Reattachment Length "
         )
         
     @pn_pn_parallel
@@ -248,16 +227,10 @@ class BFS(NekTestCase):
         self.run_nek(step_limit=None)
         
         xerr = self.get_value_from_log("r_l", column=-1, row=-1)
-        ransval = 6.58
-        expval = 6.26
-        relerr_ex = abs(xerr*4-expval)/expval
-        relerr_rans = abs(xerr*4-ransval)/ransval
+        r_l = xerr*4
         
         self.assertAlmostEqualDelayed(
-            relerr_ex, target_val=0.0, delta=5e-02, label="Reattachment Length Experimental"
-        )
-        self.assertAlmostEqualDelayed(
-            relerr_rans, target_val=0.0, delta=2e-02, label="Reattachment Length RANS (k_omega)"
+            r_l, target_val=6.491, delta=1e-7, label="Reattachment Length "
         )
 
         self.assertDelayedFailures()
@@ -283,16 +256,10 @@ class WallBFS(NekTestCase):
         self.run_nek(step_limit=None)
 
         xerr = self.get_value_from_log("r_l", column=-1, row=-1)
-        ransval = 6.58
-        expval = 6.26
-        relerr_ex = abs(xerr*4-expval)/expval
-        relerr_rans = abs(xerr*4-ransval)/ransval
+        r_l = xerr*4
         
         self.assertAlmostEqualDelayed(
-            relerr_ex, target_val=0.0, delta=10e-02, label="Reattachment Length Experimental"
-        )
-        self.assertAlmostEqualDelayed(
-            relerr_rans, target_val=0.0, delta=12e-02, label="Reattachment Length RANS (k_omega)"
+            r_l, target_val=5.802, delta=1e-07, label="Reattachment Length "
         )
 
         self.assertDelayedFailures()
@@ -311,8 +278,7 @@ class Dome(NekTestCase):
 
         self.build_tools(["genmap"])
         self.run_genmap()
-        self.parallel_procs = 96
-
+	self.parallel_procs = 96
     @pn_pn_parallel
     def test_Std_ktau(self):
         self.config_size()

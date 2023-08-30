@@ -6,7 +6,7 @@ import os
 
 l2_norm_rans =[1] * 8
 
-for i in range(1,9):
+for i in range(1,5):
 
     l2_norm=[]
     l1_norm=[]
@@ -17,9 +17,11 @@ for i in range(1,9):
     
     # Experimental Results
     experimental_file = 'exp/y'+str(i)+'.csv'
-    experimental_data = np.loadtxt(experimental_file, delimiter=',')
+    experimental_data = np.genfromtxt(experimental_file, delimiter=',', filling_values=np.nan)
     experimental_x = experimental_data[:, 0]  # Assuming x values are in the first column
     experimental_v = experimental_data[:, 1]  /np.max(experimental_data[:, 1])# Assuming velocity values are in the second column
+    experimental_tke_x = experimental_data[:, 2]  
+    experimental_tke_n = experimental_data[:, 3]  /np.max(experimental_data[:, 3])
 
     # LES Results
     simulation_file = 'les/Re_12819_'+str(i)+'.csv'
@@ -77,6 +79,7 @@ for i in range(1,9):
     plt.clf()
     plt.plot(simulation_x, interpolated_tke_r,'b' ,label='RANS-TKE')
     plt.plot(simulation_x, simulation_tke_n, 'r', label='LES-TKE')
+    plt.plot(experimental_tke_x, experimental_tke_n, 'g*', label='EXP-TKE')
     plt.legend()
     plt.xlabel('Radial Location')
     plt.grid(True,linestyle='--')
@@ -124,7 +127,6 @@ file_path = log_files
 for path in file_path:
     with open(path, "a") as file:
         file.write("Max of L2 Norm of RANS to EXP : "+str(max_value) + "\n")  # Write the value to the file
-
 
 
 

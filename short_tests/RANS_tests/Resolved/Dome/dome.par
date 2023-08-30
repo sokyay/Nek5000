@@ -2,7 +2,7 @@
 [GENERAL]
 startFrom = dome.fld
 stopAt = numSteps
-numSteps = 100000
+numSteps = 10000
 dt = 1.0e-3
 writeInterval = 10000
 

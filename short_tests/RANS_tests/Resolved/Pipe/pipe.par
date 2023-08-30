@@ -2,8 +2,8 @@
 dt = 10.0e-3
 numsteps = 10000
 writeinterval = 1000
-userparam01 = 0
-startfrom = komega.fld + time=0
+userparam01 = 4
+startfrom = ktau.fld + time=0
 
 [PROBLEMTYPE]
 variableproperties = yes
