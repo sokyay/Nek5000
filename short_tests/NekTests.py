@@ -275,7 +275,8 @@ class WallBFS(NekTestCase):
 
         self.build_tools(["genmap"])
         self.run_genmap()
-	self.parallel_procs = 96
+#	    self.parallel_procs = 96
+	    
     @pn_pn_parallel
     def test_Std_ktau_pfalse(self):
         self.config_size()
@@ -331,7 +332,47 @@ class Dome(NekTestCase):
         )
 
         self.assertDelayedFailures()
+###############################################################        
+
+class PebbleBed(NekTestCase):
+    example_subdir = "RANS_tests/Resolved/PebbleBed"
+    case_name = "pb67"
+
+    def setUp(self):
+        # Default SIZE parameters. Can be overridden in test cases
         
+        self.size_params = dict(
+            ldim="3", lx1="5", lxd="9", lx2="lx1-0", lelg="122284", lx1m="lx1", ldimt="6", lhis="200", lpmin="42*10"
+        )
+        
+        self.build_tools(["genmap"])
+        self.run_genmap()
+#        self.pplist = "HYPRE"
+        self.parallel_procs = 480
+
+    @pn_pn_parallel
+    def test_Std_ktau(self):
+        
+        
+        
+        self.config_size()
+        self.build_nek()
+        self.run_nek(step_limit=None)
+
+
+        dp_l = self.get_value_from_log("dp:", column=-1, row=-1)
+        dp_LES =6.18
+        dp_KTA=6.75
+        relerr_LES = abs(dp_l-dp_LES)/dp_LES
+        relerr_KTA=abs(dp_l-dp_KTA)/dp_KTA
+        self.assertAlmostEqualDelayed(
+            relerr_LES, target_val=0.0, delta=15e-02, label="Pressure Drop Comparison RANS and LES"
+        )
+        self.assertAlmostEqualDelayed(
+            relerr_KTA, target_val=0.0, delta=10e-02, label="Pressure Drop Comparison RANS and KTA"
+        )
+
+        self.assertDelayedFailures()
         
     ###############################################################
 if __name__ == "__main__":
@@ -386,6 +427,7 @@ if __name__ == "__main__":
         WallPipe,
         WallBFS,
         Dome,
+        PebbleBed,
     )
 
     suite = unittest.TestSuite(
