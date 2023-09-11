@@ -369,7 +369,7 @@ class PebbleBed(NekTestCase):
             relerr_LES, target_val=0.0, delta=5e-02, label="Pressure Drop Comparison RANS and LES"
         )
         self.assertAlmostEqualDelayed(
-            relerr_KTA, target_val=0.0, delta=15e-02, label="Pressure Drop Comparison RANS and KTA"
+            relerr_KTA, target_val=0.0, delta=10e-02, label="Pressure Drop Comparison RANS and KTA"
         )
 
         self.assertDelayedFailures()
